@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portal de Relatórios</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            padding: 40px;
+            max-width: 500px;
+            width: 100%;
+        }
+
+        .logo {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .logo h1 {
+            color: #667eea;
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+
+        .logo p {
+            color: #666;
+            font-size: 14px;
+        }
+
+        /* Login Form */
+        .login-form {
+            display: block;
+        }
+
+        .login-form.hidden {
+            display: none;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 500;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .btn-login {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .btn-login:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .error-message {
+            color: #e74c3c;
+            font-size: 14px;
+            margin-top: 10px;
+            display: none;
+        }
+
+        .error-message.show {
+            display: block;
+        }
+
+        /* Dashboard */
+        .dashboard {
+            display: none;
+        }
+
+        .dashboard.active {
+            display: block;
+        }
+
+        .welcome {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .welcome h2 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .welcome p {
+            color: #666;
+        }
+
+        .reports-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .report-btn {
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 12px;
+            text-align: center;
+            font-weight: 600;
+            font-size: 16px;
+            transition: transform 0.2s, box-shadow 0.2s;
+            display: block;
+        }
+
+        .report-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .report-btn:nth-child(1) {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .report-btn:nth-child(2) {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+
+        .report-btn:nth-child(3) {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        }
+
+        .report-btn:nth-child(4) {
+            background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+        }
+
+        .logout-btn {
+            width: 100%;
+            padding: 12px;
+            background: #e0e0e0;
+            color: #666;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .logout-btn:hover {
+            background: #d0d0d0;
+        }
+
+        @media (min-width: 600px) {
+            .reports-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Login Form -->
+        <div class="login-form" id="loginForm">
+            <div class="logo">
+                <h1>📊 Portal de Relatórios</h1>
+                <p>Acesso aos relatórios Power BI</p>
+            </div>
+            
+            <form onsubmit="handleLogin(event)">
+                <div class="form-group">
+                    <label for="username">Usuário</label>
+                    <input type="text" id="username" required autocomplete="username">
+                </div>
+                
+                <div class="form-group">
+                    <label for="password">Senha</label>
+                    <input type="password" id="password" required autocomplete="current-password">
+                </div>
+                
+                <button type="submit" class="btn-login">Entrar</button>
+                <p class="error-message" id="errorMessage">Usuário ou senha incorretos</p>
+            </form>
+        </div>
+
+        <!-- Dashboard -->
+        <div class="dashboard" id="dashboard">
+            <div class="welcome">
+                <h2>Bem-vindo!</h2>
+                <p>Selecione um relatório para visualizar</p>
+            </div>
+            
+            <div class="reports-grid">
+                <a href="SEU_LINK_POWERBI_1" target="_blank" class="report-btn">
+                    📈 Relatório 1
+                </a>
+                <a href="SEU_LINK_POWERBI_2" target="_blank" class="report-btn">
+                    📊 Relatório 2
+                </a>
+                <a href="SEU_LINK_POWERBI_3" target="_blank" class="report-btn">
+                    💹 Relatório 3
+                </a>
+                <a href="SEU_LINK_POWERBI_4" target="_blank" class="report-btn">
+                    📉 Relatório 4
+                </a>
+            </div>
+            
+            <button onclick="handleLogout()" class="logout-btn">Sair</button>
+        </div>
+    </div>
+
+    <script>
+        // CONFIGURAÇÃO DE USUÁRIOS
+        // Altere aqui os usuários e senhas permitidos
+        const validUsers = {
+            'admin': 'admin123',
+            'usuario1': 'senha123',
+            'usuario2': 'senha456'
+        };
+
+        function handleLogin(event) {
+            event.preventDefault();
+            
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const errorMessage = document.getElementById('errorMessage');
+            
+            // Verifica credenciais
+            if (validUsers[username] && validUsers[username] === password) {
+                // Login bem-sucedido
+                document.getElementById('loginForm').classList.add('hidden');
+                document.getElementById('dashboard').classList.add('active');
+                errorMessage.classList.remove('show');
+                
+                // Salva sessão (expira ao fechar navegador)
+                sessionStorage.setItem('isLoggedIn', 'true');
+            } else {
+                // Login falhou
+                errorMessage.classList.add('show');
+            }
+        }
+
+        function handleLogout() {
+            sessionStorage.removeItem('isLoggedIn');
+            document.getElementById('loginForm').classList.remove('hidden');
+            document.getElementById('dashboard').classList.remove('active');
+            document.getElementById('username').value = '';
+            document.getElementById('password').value = '';
+        }
+
+        // Verifica se já está logado ao carregar a página
+        window.onload = function() {
+            if (sessionStorage.getItem('isLoggedIn') === 'true') {
+                document.getElementById('loginForm').classList.add('hidden');
+                document.getElementById('dashboard').classList.add('active');
+            }
+        };
+    </script>
+</body>
+</html>
